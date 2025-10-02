@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="card bg-dark text-white shadow-lg rounded-4">
+            <div class="card-body">
+                <h1 class="card-title display-5 fw-bold">{{ post.title }}</h1>
+                <h6 class="card-subtitle mb-4 text-muted">
+                    by {{ post.author.username }} on {{ post.date_created.strftime('%b %d, %Y') }}
+                </h6>
+                <p class="card-text fs-5">{{ post.content | replace('\n', '<br>') | safe }}</p>
+                <a href="{{ url_for('posts_page') }}" class="btn btn-primary mt-4">
+                    <i class="bi bi-arrow-left-circle"></i> Back to Posts
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
