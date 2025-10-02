@@ -12,7 +12,7 @@ def home_page():
     return render_template("home.html")
 
 @app.route("/register", methods = ["GET", "POST"])
-def register_page():
+def register_page():    
     form = RegistrationForm()
     if form.validate_on_submit():
         user_to_create = User(username = form.username.data, email = form.email.data, password = form.password.data)
@@ -112,6 +112,7 @@ def posts_page():
         return render_template("posts.html", posts = posts, user_posts = user_posts)
 
 @app.route("/posts/<int:post_id>")
+@login_required
 def view_post(post_id):
     post = Post.query.get_or_404(post_id)
     return render_template("post_page.html", post = post)
