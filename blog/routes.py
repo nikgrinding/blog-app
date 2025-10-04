@@ -23,8 +23,11 @@ def register_page():
         confirm_url = url_for("confirm_email", token = token, _external = True)
         html = render_template("email/confirm.html", confirm_url = confirm_url, user = user_to_create)
         msg = Message("Confirm your email for Blog App", recipients = [user_to_create.email], html = html)
-        mail.send(msg)
-        flash("Account created! Please check your email to confirm before logging in.", category = "info")
+        try:
+            mail.send(msg)
+            flash("Account created! Please check your email to confirm before logging in.", category = "info")
+        except Exception as e:
+            flash("Account created, but we couldn't send the confirmation email. Please contact support.", category = "warning")
         return redirect(url_for("login_page"))
     if form.errors != {}:
         for err_msg in form.errors.values():
@@ -58,7 +61,11 @@ def reset_request():
             reset_url = url_for("reset_token", token = token, _external = True)
             html = render_template("email/reset.html", reset_url = reset_url, user = user)
             msg = Message("Password reset for Blog App", recipients = [user.email], html = html)
-            mail.send(msg)
+            try:
+                mail.send(msg)
+            except Exception as e:
+                flash("There was an error sending the reset email. Please try again later.", category = "danger")
+                return render_template("reset_request.html", form=form)
         flash("If an account with that email exists, a reset link has been sent.", category = "info")
         return redirect(url_for("login_page"))
     return render_template("reset_request.html", form=form)
@@ -83,17 +90,14 @@ def login_page():
     form = LoginForm()
     if form.validate_on_submit():
         attempted_user = User.query.filter_by(username = form.username.data).first()
-        if attempted_user:
-            if not attempted_user.check_password(form.password.data):
-                flash("Incorrect password! Please try again", category = "danger")
-            elif not attempted_user.confirmed:
-                flash("Please confirm your email before logging in.", category = "danger")
-            else:
-                login_user(attempted_user)
-                flash(f"Login successful! You are logged in as: {attempted_user}", category = "success")
-                return redirect(url_for("posts_page"))
+        if not attempted_user or not attempted_user.check_password(form.password.data):
+            flash("Invalid username or password", category = "danger")
+        elif not attempted_user.confirmed:
+            flash("Please confirm your email before logging in.", category = "danger")
         else:
-            flash("User doesn't exist", category = "danger")
+            login_user(attempted_user)
+            flash(f"Login successful! You are logged in as: {attempted_user}", category = "success")
+            return redirect(url_for("posts_page"))
     return render_template("login.html", form = form)
 
 @app.route("/logout")
@@ -137,7 +141,7 @@ def edit_post(post_id):
         flash("You are not allowed to edit this post.", category = "danger")
         return redirect(url_for("posts_page"))
     form = PostForm(obj = post)
-    form.being_edited = True
+    form.post_id = post.id
     if form.validate_on_submit():
         post.title = form.title.data
         post.description = form.description.data

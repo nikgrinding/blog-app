@@ -30,8 +30,10 @@ class PostForm(FlaskForm):
 
     def validate_title(self, title_to_check):
         post = Post.query.filter_by(title = title_to_check.data).first()
-        if post and not getattr(self, 'being_edited', False):
-            raise ValidationError(f"A post with title - '{title_to_check.data}' already exists! Please use a different title.")
+        if post:
+            post_id = getattr(self, 'post_id', None)
+            if not post_id or post.id != post_id:
+                raise ValidationError(f"A post with title - '{title_to_check.data}' already exists! Please use a different title.")
 
     title = StringField(label = "Title: ", validators = [DataRequired(), Length(min = 5, max = 50)])
     description = StringField(label = "Description: ", validators = [DataRequired(), Length(min = 10, max = 100)])

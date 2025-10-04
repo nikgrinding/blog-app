@@ -1,6 +1,6 @@
 from blog import db, bcrypt, login_manager
 from flask_login import UserMixin
-from datetime import datetime
+from datetime import datetime, timezone
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -31,5 +31,8 @@ class Post(db.Model):
     title = db.Column(db.String(50), unique = True, nullable = False)
     description = db.Column(db.String(100), nullable = False)
     content = db.Column(db.Text(), nullable = False)
-    date_created = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+    date_created = db.Column(db.DateTime, nullable = False, default = lambda: datetime.now(timezone.utc), index = True)
     author_id = db.Column(db.Integer(), db.ForeignKey("user.id"), nullable = False)
+
+    def __repr__(self):
+        return f"Post('{self.title}', '{self.date_created}')"
