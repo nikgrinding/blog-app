@@ -6,16 +6,28 @@
 
 {% block content %}
     <div class="container mt-5">
-        <div class="card bg-dark text-white shadow-lg rounded-4">
-            <div class="card-body">
-                <h1 class="card-title display-5 fw-bold">{{ post.title }}</h1>
-                <h6 class="card-subtitle mb-4 text-muted">
-                    by {{ post.author.username }} on {{ post.date_created.strftime('%b %d, %Y') }}
-                </h6>
-                <p class="card-text fs-5">{{ post.content | replace('\n', '<br>') | safe }}</p>
-                <a href="{{ url_for('posts_page') }}" class="btn btn-primary mt-4">
-                    <i class="bi bi-arrow-left-circle"></i> Back to Posts
-                </a>
+        <div class="card text-white">
+            <div class="card-body p-4">
+                <div class="mb-4">
+                    <h1 class="mb-3">{{ post.title }}</h1>
+                    <div class="d-flex align-items-center text-white-50">
+                        <i class="bi bi-person me-2"></i>
+                        <span class="me-3">{{ post.author.username }}</span>
+                        <i class="bi bi-calendar3 me-2"></i>
+                        <span>{{ post.date_created.strftime('%b %d, %Y') }}</span>
+                    </div>
+                </div>
+                <div class="mb-4 pb-3 border-bottom border-secondary">
+                    <p class="lead text-white-50">{{ post.description }}</p>
+                </div>
+                <div class="card-text fs-6 lh-lg">
+                    {{ post.content | replace('\n', '<br>') | safe }}
+                </div>
+                <div class="mt-4 pt-3 border-top border-secondary">
+                    <a href="{{ url_for('posts_page') }}" class="btn btn-primary">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Posts
+                    </a>
+                </div>
             </div>
         </div>
     </div>

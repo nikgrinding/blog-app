@@ -6,37 +6,34 @@
 
 {% block content %}
     <div class="container mt-5">
-
-        <div class="p-5 mb-5 rounded-5 text-center text-white shadow-lg" style="background: linear-gradient(135deg, #1c1c1c, #343a40);">
-            <h1 class="display-3 fw-bold">Welcome to my Blog App!</h1>
-            <p class="lead mt-4 fs-5">
-                Jump into random stories, share your hilarious fails, weird thoughts, or epic rants - 
-                <em class="text-danger">no judgment here</em>
-            </p>
-            <hr class="my-4 border-light border-2">
-            <h2 class="fw-semibold display-6">Let's make blogging fun!</h2>
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-white mb-3">Welcome to Blog App</h1>
+            <p class="lead text-white-50">Share your stories, thoughts, and ideas with the community</p>
         </div>
 
-        <div class="row g-4 text-center">
+        <div class="row g-4 mb-5">
             {% set cards = [
-                {"title": "Peek at Stories", "text": "Sneak a peek at weird, funny, and totally relatable stories."},
-                {"title": "Spill Your Beans", "text": "Got a wild story, a meme-worthy moment, or a random rant? Drop it here and let the laughs begin."},
-                {"title": "Connect with fellow Bloggers", "text": "Swap crazy ideas, post random thoughts, or challenge each other to write something wild."}
+                {"title": "Read Stories", "icon": "bi-book", "text": "Discover interesting articles and stories from our community."},
+                {"title": "Share Your Voice", "icon": "bi-pencil-square", "text": "Write and publish your own blog posts easily."},
+                {"title": "Join the Community", "icon": "bi-people", "text": "Connect with other writers and readers."}
             ] %}
             {% for card in cards %}
                 <div class="col-md-4">
-                    <div class="card bg-dark text-white h-100 shadow-lg border-0">
-                        <div class="card-body d-flex flex-column justify-content-center py-4">
-                            <h3 class="card-title fw-bold fs-4">{{ card.title }}</h3>
-                            <p class="card-text mt-3 fs-6 opacity-75">{{ card.text }}</p>
+                    <div class="card h-100 text-white">
+                        <div class="card-body text-center py-4">
+                            <i class="{{ card.icon }} fs-1 text-primary mb-3 d-block"></i>
+                            <h5 class="card-title mb-3">{{ card.title }}</h5>
+                            <p class="card-text text-white-50">{{ card.text }}</p>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
 
-        <div class="text-center mt-5">
-            <a href="{{ url_for('posts_page') }}" class="btn btn-primary btn-lg">View All Posts</a>
+        <div class="text-center mb-5">
+            <a href="{{ url_for('posts_page') }}" class="btn btn-primary btn-lg px-5">
+                View All Posts <i class="bi bi-arrow-right ms-2"></i>
+            </a>
         </div>
     </div>
 {% endblock %}
