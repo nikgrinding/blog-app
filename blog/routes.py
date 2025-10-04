@@ -111,7 +111,7 @@ def logout_page():
 def posts_page():
     if request.method == "GET":
         page = request.args.get('page', 1, type = int)
-        posts = Post.query.order_by(Post.date_created.desc()).paginate(page = page, per_page = 9)
+        posts = Post.query.order_by(Post.date_created.desc()).paginate(page = page, per_page = 6)
         user_posts = Post.query.filter_by(author_id = current_user.id).order_by(Post.date_created.desc()).all()
         return render_template("posts.html", posts = posts, user_posts = user_posts)
 
